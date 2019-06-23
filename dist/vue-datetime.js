@@ -70,8 +70,8 @@ function monthDays (year, month, weekStart) {
     )
 }
 
-function monthDayIsDisabled (minDate, maxDate, year, month, day) {
-  var date = luxon.DateTime.fromObject({ year: year, month: month, day: day, zone: 'UTC' });
+function monthDayIsDisabled (minDate, maxDate, year, month, day, zone) {
+  var date = luxon.DateTime.fromObject({ year: year, month: month, day: day, zone: zone });
 
   minDate = minDate ? startOfDay(minDate) : null;
   maxDate = maxDate ? startOfDay(maxDate) : null;
@@ -220,12 +220,15 @@ var DatetimeCalendar = {render: function(){var _vm=this;var _h=_vm.$createElemen
     },
     days: function days () {
       var this$1 = this;
-
+      var zone = "UTC";
+      if (document.getElementById("vdatetime-calendar__current--zone") && document.getElementById("vdatetime-calendar__current--zone").innerHTML) {
+        zone = document.getElementById("vdatetime-calendar__current--zone").innerHTML
+      }
       return monthDays(this.newYear, this.newMonth, this.weekStart).map(function (day) { return ({
         number: day,
         selected: day && this$1.year === this$1.newYear && this$1.month === this$1.newMonth && this$1.day === day,
-        disabled: !day || monthDayIsDisabled(this$1.minDate, this$1.maxDate, this$1.newYear, this$1.newMonth, day)
-      }); })
+        disabled: !day || monthDayIsDisabled(this$1.minDate, this$1.maxDate, this$1.newYear, this$1.newMonth, day, zone)
+      }) })
     }
   },
 
